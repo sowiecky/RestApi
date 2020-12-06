@@ -70,4 +70,8 @@ public class GroupsService {
 
         return groupsRepository.test(id);
     }
+
+    public Groups getGroupById(long groupId) {
+        return groupsRepository.getGroupById(groupId);
+    }
 }

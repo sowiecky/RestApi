@@ -59,4 +59,5 @@ public class Groups {
     public void setUsers_id(long users_id) {
         this.users_id = users_id;
     }
+
 }

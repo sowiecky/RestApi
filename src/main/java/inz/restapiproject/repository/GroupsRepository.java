@@ -27,4 +27,7 @@ public interface GroupsRepository extends JpaRepository<Groups, Long> {
 
     @Query("SELECT g FROM Groups g INNER JOIN Lights l ON g.id= ?1")
     List<Groups> test(long id);
+
+    @Query("SELECT g FROM Groups g WHERE g.id= ?1")
+    Groups getGroupById(long id);
 }
