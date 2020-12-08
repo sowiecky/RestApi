@@ -8,10 +8,12 @@ import inz.restapiproject.model.Users;
 //import inz.restapiproject.service.GroupsHasLightsService;
 import inz.restapiproject.service.GroupsService;
 import inz.restapiproject.service.LightsService;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/lights")
@@ -75,42 +77,25 @@ public class LightsController {
             }
     }
 
+
     @PostMapping("/addLightToGroup")
     public @ResponseBody String addLightToGroup(@RequestParam String serial, @RequestParam String name, @RequestParam String user_id){
-        //TEST
-        //String id = "100";
-        //long idl = Long.parseLong(id);
-        //List<Groups> test = groupsService.test(idl);
-        //System.out.println(test);
-        //KONIEC TEST nie dziala
 
+        long idGroup = groupsService.findIdSeekGroup(name, Long.parseLong(user_id));
+        Groups group = groupsService.getGroupById(idGroup);
 
-        //zamiana idUsera ze String na long
-        long idUser = Long.parseLong(user_id);
-        //szukanie idGrupy dla danej jej nazwy i usera
-        long seekIdGroup = groupsService.findIdSeekGroup(name, idUser);
-        //Pobranie listy wszystkich grup dla podanego idUsera
-        List<Groups> groupsList = groupsService.findAllGroupsForUserId(idUser);
+        Set<Lights> lights  = groupsService.getGroupById(groupsService.findIdDefaultGroup("Wszystkie urzadzenia", Long.parseLong(user_id))).getLights(); //wszystkie urządzenia uzytkownika
 
-
-        Lights lights = new Lights();
-        lights.setSerial(serial);
-        String nameLight = lightsService.findNameOfLight(serial);
-        lights.setName(nameLight);
-
-        lightsService.savelight(lights);
-
-        //dla kazdego elementu z groupsList
-        for (Groups group: groupsList) {
-            if(group.getId() == seekIdGroup) {
-                //dodaje do hashset
-                group.getLights().add(lights);
-                //zapisuje w bd
-                groupsService.saveGroup(group);
-                break;
+        for(Lights singleLight: lights) {
+            if (singleLight.getSerial().equals(serial)) {           //wyszukiwanie żarówki o podanym serialu
+                if (!group.getLights().contains(singleLight)) {     //Jeśli żarówka nie jest w podanej grupie - dodaj
+                    group.getLights().add(singleLight);             //tworzenie połączenia w tabeli łączącej
+                    groupsService.saveGroup(group);                 //zapis w bazie
+                    return "saved";
+                }
             }
         }
-        return "Saved";
+        return "light_exists_in_group";
     }
 
     @GetMapping("/get")
@@ -120,5 +105,7 @@ public class LightsController {
 
             return lightsService.findLights(idUser);
     }
+
+
 
 }
