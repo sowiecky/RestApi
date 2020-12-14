@@ -1,6 +1,7 @@
 package inz.restapiproject.service;
 
 
+import inz.restapiproject.model.Groups;
 import inz.restapiproject.model.Lights;
 import inz.restapiproject.repository.LightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class LightsService {
@@ -40,5 +42,18 @@ public class LightsService {
     //(LightsController)
     public List<Lights> checkExistOfLight(String serial, String name) {
         return lightsRepository.checkExistOfLight(serial, name);
+    }
+
+
+    public long findIdSeekLightBySerial(String serial) {
+        return lightsRepository.findIdSeekLightBySerial(serial);
+    }
+
+    public Lights getLightById(long idLight) {
+        return lightsRepository.getLightById(idLight);
+    }
+
+    public void deleteLight(Lights light) {
+        lightsRepository.delete(light);
     }
 }

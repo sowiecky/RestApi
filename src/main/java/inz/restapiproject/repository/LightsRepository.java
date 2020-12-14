@@ -22,4 +22,10 @@ public interface LightsRepository extends JpaRepository<Lights, Long> {
 
     @Query("SELECT l FROM Lights l WHERE l.serial = ?1 AND l.name = ?2")
     List<Lights> checkExistOfLight(String serial, String name);
+
+    @Query("SELECT l.id FROM Lights l WHERE l.serial = ?1")
+    long findIdSeekLightBySerial(String serial);
+
+    @Query("SELECT l FROM Lights l WHERE l.id = ?1")
+    Lights getLightById(long idLight);
 }

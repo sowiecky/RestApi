@@ -98,6 +98,46 @@ public class LightsController {
         return "light_exists_in_group";
     }
 
+    @DeleteMapping("/removeLightToGroup")
+    public @ResponseBody String removeLightToGroup(@RequestParam String serial, @RequestParam String name, @RequestParam String user_id){
+
+        long idGroup = groupsService.findIdSeekGroup(name, Long.parseLong(user_id));
+        Groups group = groupsService.getGroupById(idGroup);
+
+        Set<Lights> lights  = groupsService.getGroupById(groupsService.findIdDefaultGroup("Wszystkie urzadzenia", Long.parseLong(user_id))).getLights(); //wszystkie urządzenia uzytkownika
+
+        for(Lights singleLight: lights) {
+            if (singleLight.getSerial().equals(serial)) {           //wyszukiwanie żarówki o podanym serialu
+                if (group.getLights().contains(singleLight)) {     //Jeśli żarówka jest w podanej grupie - usun
+                    group.getLights().remove(singleLight);             //usuwanie połączenia w tabeli łączącej
+                    groupsService.saveGroup(group);                 //zapis w bazie
+                    return "removed";
+                }
+            }
+        }
+        return "light_not_in_group";
+    }
+
+    @DeleteMapping("/removeLight")
+    public @ResponseBody String removeLightToGroup(@RequestParam String serial, @RequestParam String user_id){
+
+        long idLight = lightsService.findIdSeekLightBySerial(serial);
+        Lights light = lightsService.getLightById(idLight);
+
+        //Pobranie listy wszystkich grup dla podanego idUsera
+        List<Groups> groupsList = groupsService.findAllGroupsForUserId(Long.parseLong(user_id));
+
+        for (Groups group : groupsList) {
+            if (group.getLights().contains(light)) {
+                group.getLights().remove(light);            //Jezeli grupa zawiera dane urzadzenie - usun
+            }
+        }
+
+        lightsService.deleteLight(light);                    //usuniecie urzadzenia
+
+        return "Removed";
+    }
+
     @GetMapping("/get")
     public @ResponseBody List<Lights> getLights(@RequestParam String user_id){
 

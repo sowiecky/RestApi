@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/groups")
@@ -38,6 +39,17 @@ public class GroupsController {
         }else{
             return "Group_exists";
         }
+    }
+
+    @DeleteMapping("/removeGroup")
+    public @ResponseBody String removeLightToGroup(@RequestParam String name, @RequestParam String user_id){
+
+        long idGroup = groupsService.findIdSeekGroup(name, Long.parseLong(user_id));
+        Groups group = groupsService.getGroupById(idGroup);
+
+        groupsService.deleteGroup(group);                              //usuniecie grupy
+
+        return "Removed";
     }
 
     @GetMapping("/get")

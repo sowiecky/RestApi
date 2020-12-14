@@ -74,4 +74,8 @@ public class GroupsService {
     public Groups getGroupById(long groupId) {
         return groupsRepository.getGroupById(groupId);
     }
+
+    public void deleteGroup(Groups group) {
+        groupsRepository.delete(group);
+    }
 }
