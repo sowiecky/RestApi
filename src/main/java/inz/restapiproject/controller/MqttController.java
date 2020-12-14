@@ -33,4 +33,20 @@ public class MqttController {
         }
         return "Wyslane";
     }
+
+    @GetMapping("/sendInfoOne")
+    public @ResponseBody String sendInfoOne(@RequestParam String message , @RequestParam String serial) {
+
+        String messageToMqtt = message.replace("_", " ");                       //dostosowywanie wiadomości
+
+        try {
+            mqttService.publish(serial,messageToMqtt, 0, false);                    //wyslanie na jedno konkretne urzadzenie
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+
+
+        return "Wyslane";
+    }
+
 }
