@@ -40,8 +40,8 @@ public class LightsService {
 
     //Sprawdzenie czy urzadzenie znajduje sie juz w BD
     //(LightsController)
-    public List<Lights> checkExistOfLight(String serial, String name) {
-        return lightsRepository.checkExistOfLight(serial, name);
+    public List<Lights> checkExistOfSerialLight(String serial) {
+        return lightsRepository.checkExistOfSerialLight(serial);
     }
 
 

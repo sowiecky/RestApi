@@ -12,6 +12,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,24 +26,13 @@ public class LightsController {
     @Autowired
     GroupsService groupsService;
 
-//    @Autowired
-//    GroupsHasLightsService groupsHasLightsService;
-
-    /*
-    @GetMapping("/all")
-    public @ResponseBody
-    List<Lights> getLights(){
-        return lightsService.getUsers();
-    }
-
-     */
 
     @PostMapping("/add")
     public @ResponseBody String addLight(@RequestParam String serial, @RequestParam String name, @RequestParam String user_id){
 
             long idUser = Long.parseLong(user_id);
 
-            if(lightsService.checkExistOfLight(serial, name).isEmpty()) {
+            if(lightsService.checkExistOfSerialLight(serial).isEmpty()) {
                 //Dodanie światła
                 Lights n = new Lights();
                 n.setSerial(serial);
@@ -62,7 +52,7 @@ public class LightsController {
 
                 //dla kazdego elementu z groupsList
                 for (Groups group : groupsList) {
-                    //sprawdza czy id grupy zgadza sie z id"Wszystkie urz"
+                    //sprawdza czy id grupy zgadza sie z id"Wszystkie urzadzenia"
                     if (group.getId() == defaultGroupId) {
                         //dodaje do hashset
                         group.getLights().add(n);
@@ -91,12 +81,36 @@ public class LightsController {
                 if (!group.getLights().contains(singleLight)) {     //Jeśli żarówka nie jest w podanej grupie - dodaj
                     group.getLights().add(singleLight);             //tworzenie połączenia w tabeli łączącej
                     groupsService.saveGroup(group);                 //zapis w bazie
-                    return "saved";
+                    return "Saved";
                 }
+                return "Light_exists_in_group";
             }
         }
-        return "light_exists_in_group";
+        return "Light_serial_doesnt_exists";
     }
+
+    @GetMapping("/getGroupWOLight")
+    public @ResponseBody List<Groups> getGroupWOLight(@RequestParam String light_id, @RequestParam String user_id){
+
+
+        //Pobranie listy wszystkich grup dla podanego idUsera
+        List<Groups> groupsList = groupsService.findAllGroupsForUserIdWODefault(Long.parseLong(user_id));
+
+        Lights light = lightsService.getLightById(Long.parseLong(light_id));
+
+        List groupsListWOLight = new ArrayList();
+
+        for (Groups group : groupsList) {
+            if (group.getLights().contains(light)) {
+
+            }else{
+                groupsListWOLight.add(group);
+            }
+        }
+
+        return groupsListWOLight;
+    }
+
 
     @DeleteMapping("/removeLightToGroup")
     public @ResponseBody String removeLightToGroup(@RequestParam String serial, @RequestParam String name, @RequestParam String user_id){
@@ -111,7 +125,7 @@ public class LightsController {
                 if (group.getLights().contains(singleLight)) {     //Jeśli żarówka jest w podanej grupie - usun
                     group.getLights().remove(singleLight);             //usuwanie połączenia w tabeli łączącej
                     groupsService.saveGroup(group);                 //zapis w bazie
-                    return "removed";
+                    return "Removed";
                 }
             }
         }

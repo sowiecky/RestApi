@@ -20,10 +20,6 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
     @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private MqttService mqttService;
-    @Autowired
     private GroupsService groupsService;
 
     //Do zwrocenia wszystkich userow
@@ -57,7 +53,7 @@ public class UsersController {
 
             //Przypisuje nowego usera do defaultGroup
             Groups group = new Groups();
-            group.setName("Wszystkie urządzenia");
+            group.setName("Wszystkie urzadzenia");
             group.setUsers_id(id);
 
             groupsService.saveDefaultGroup(group);
@@ -70,7 +66,6 @@ public class UsersController {
     @GetMapping("/checklog")
     public @ResponseBody String checklog(@RequestParam String login, @RequestParam String password){
 
-
         if(usersService.findLoginAndPassword(login, password)){
 
             String idOfLoggedUser = usersService.findLogin(login);
@@ -79,7 +74,6 @@ public class UsersController {
         }else{
             return "false";
         }
-
     }
 
     //Do sprawdzenia po mail&passwd
@@ -92,39 +86,5 @@ public class UsersController {
             return false;
         }
     }
-
-
-
-    @PostMapping("/test")
-    public @ResponseBody void test2(@RequestParam String login, @RequestParam String password){
-        final String topic = login;
-        String msg = password;
-
-        try {
-            mqttService.publish(topic, password, 0, false);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
-
-/*
-    @PostMapping("/test2")
-    public @ResponseBody String test3(){
-
-        Users users = new Users("root2", "password", "root2@root.com");
-
-        Groups groups1 = new Groups("forRoot2v1");
-        Groups groups2 = new Groups("forRoot2v2");
-
-        users.getGroups().add(groups1);
-        users.getGroups().add(groups2);
-
-        this.usersRepository.save(users);
-
-        return "halo";
-
-    }
-*/
-
 
 }

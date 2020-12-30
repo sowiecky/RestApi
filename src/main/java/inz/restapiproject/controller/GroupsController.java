@@ -18,8 +18,6 @@ public class GroupsController {
     @Autowired
     GroupsService groupsService;
 
-    @Autowired
-    LightsService lightsService;
 
     @PostMapping("/add")
     public @ResponseBody
@@ -58,13 +56,5 @@ public class GroupsController {
         long iduser = Long.parseLong(user_id);
         return groupsService.findAllGroupsForUserId(iduser);
     }
-
-    @GetMapping("/test")
-    public @ResponseBody
-    List<Groups> test(){
-
-        return groupsService.test(102);
-    }
-
 
 }

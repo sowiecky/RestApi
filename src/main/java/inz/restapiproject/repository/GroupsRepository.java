@@ -25,11 +25,9 @@ public interface GroupsRepository extends JpaRepository<Groups, Long> {
     @Query("SELECT g FROM Groups g WHERE g.name = ?1")
     List<Groups> checkExistOfGroup(String name);
 
-    @Query("SELECT g FROM Groups g INNER JOIN Lights l ON g.id= ?1")
-    List<Groups> test(long id);
-
     @Query("SELECT g FROM Groups g WHERE g.id= ?1")
     Groups getGroupById(long id);
 
-
+    @Query("SELECT g FROM Groups g WHERE g.users_id = ?1 AND g.name NOT LIKE ?2 ")
+    List<Groups> findAllGroupsForUserIdWODefault(long idUser, String name);
 }

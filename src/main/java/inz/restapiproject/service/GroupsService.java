@@ -65,17 +65,15 @@ public class GroupsService {
         return groupsRepository.checkExistOfGroup(name);
     }
 
-    //TEST
-    public List<Groups> test(long id) {
-
-        return groupsRepository.test(id);
-    }
-
     public Groups getGroupById(long groupId) {
         return groupsRepository.getGroupById(groupId);
     }
 
     public void deleteGroup(Groups group) {
         groupsRepository.delete(group);
+    }
+
+    public List<Groups> findAllGroupsForUserIdWODefault(long idUser) {
+        return groupsRepository.findAllGroupsForUserIdWODefault(idUser, "Wszystkie urzadzenia");
     }
 }

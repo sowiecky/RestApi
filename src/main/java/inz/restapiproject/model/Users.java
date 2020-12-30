@@ -27,21 +27,6 @@ public class Users {
         this.email = email;
     }
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_id", referencedColumnName = "id")
-    List<Groups> groups = new ArrayList<>();
-
-
-    public List<Groups> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Groups> groups) {
-        this.groups = groups;
-    }
-*/
-
     public long getId() {
         return id;
     }

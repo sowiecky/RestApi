@@ -16,10 +16,11 @@ public class Groups {
     private String name;
     private long users_id;
 
+    //Relacja ManyToMany
     @ManyToMany
-    @JoinTable(name = "groups_has_lights",
-    joinColumns = @JoinColumn(name = "groups_id"),
-    inverseJoinColumns = @JoinColumn(name = "lights_id"))
+    @JoinTable(name = "groups_has_lights",                          //nazwa grupy łączącej
+    joinColumns = @JoinColumn(name = "groups_id"),                  //Klucz obcy właściciela
+    inverseJoinColumns = @JoinColumn(name = "lights_id"))           //Klucz obcy docelowy
     Set<Lights> lights = new HashSet<>();
 
 
