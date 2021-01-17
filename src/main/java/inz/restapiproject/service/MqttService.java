@@ -24,6 +24,7 @@ public class MqttService {
 
         //mqttClient.publish(topic, payload.getBytes(), qos, retained);
         //Z disconnect() "zatrzymuje sie na jednym topicku"
+
         //mqttClient.disconnect();
     }
 
