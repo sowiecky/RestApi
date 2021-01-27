@@ -6,9 +6,10 @@ RestApi stworzone w projekcie grupowym, który miał na celu zdalne zarządzanie
 -dodanie grupy(nazwa) <br />
 -dodanie urządzenia do istniejącej grupy <br />
 -usunięcie grupy, urządzenia <br />
--wysyłanie komunikatów sterujących zarówno grupami jak i światłami za pośrednictwem brokera: <br />
-  >włączanie/wyłączanie lampki <br />
-  >zmiana barwy, jasności, natężenia światła <br />
-  >zmiana trybów pracy <br />
-
+<p> -wysyłanie komunikatów sterujących zarówno grupami jak i światłami za pośrednictwem brokera: </p> <br />
+<ul>
+  <li>włączanie/wyłączanie lampki </li> <br />
+  <li>zmiana barwy, jasności, natężenia światła </li> <br />
+  <li>zmiana trybów pracy </li> <br />
+</ul>
 Copyright 01.01.2021 by sowiecky
